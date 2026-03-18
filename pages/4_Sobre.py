@@ -124,7 +124,7 @@ st.markdown(
         Se você deseja contribuir com o código, sugerir novos dados ou reportar ajustes,
         utilize nossos canais oficiais:<br><br>
         📧 <b>E-mail:</b> <a href="mailto:sibm.mamiferos@gmail.com">sibm.mamiferos@gmail.com</a><br>
-        🐙 <b>GitHub:</b> <a href="https://github.com/seu-repositorio" target="_blank">github.com/seu-repositorio</a>
+        🐙 <b>GitHub:</b> <a href="https://github.com/sibmmamiferos/" target="_blank">github.com/seu-repositorio</a>
     </div>
     """,
     unsafe_allow_html=True

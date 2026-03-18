@@ -111,130 +111,24 @@ def aplicar_estilo(pagina_atual=""):
 
     logo_b64 = _logo_base64()
     logo_html = (
-        f'<img src="data:image/png;base64,{logo_b64}" alt="SIBM" style="height:52px;object-fit:contain;vertical-align:middle;">'
+        f'<img src="data:image/png;base64,{logo_b64}" alt="SIBM" style="height:72px;object-fit:contain;vertical-align:middle;">'
         if logo_b64
         else '<span style="color:white;font-weight:700;font-size:20px;">SIBM</span>'
     )
 
-    # Navbar responsiva com menu hamburguer no mobile
-    st.markdown(f"""
-    <style>
-    .sibm-navbar {{
-        position: fixed;
-        top: 0; left: 0; right: 0;
-        z-index: 99999;
-        background-color: #2D4F1E;
-        padding: 0 24px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        min-height: 64px;
-    }}
-    .sibm-logo {{ display: flex; align-items: center; }}
-    .sibm-nav-links {{
-        display: flex;
-        gap: 4px;
-        align-items: center;
-    }}
-    .sibm-nav-links a {{
-        color: rgba(255,255,255,0.85);
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 500;
-        padding: 8px 12px;
-        border-radius: 6px;
-        white-space: nowrap;
-        transition: background 0.2s;
-    }}
-    .sibm-nav-links a:hover {{
-        background-color: rgba(255,255,255,0.15);
-        color: white;
-    }}
-    .sibm-hamburger {{
-        display: none;
-        flex-direction: column;
-        cursor: pointer;
-        gap: 5px;
-        padding: 8px;
-    }}
-    .sibm-hamburger span {{
-        display: block;
-        width: 25px;
-        height: 2px;
-        background-color: white;
-        border-radius: 2px;
-        transition: all 0.3s;
-    }}
-    .sibm-mobile-menu {{
-        display: none;
-        position: fixed;
-        top: 64px; left: 0; right: 0;
-        background-color: #2D4F1E;
-        z-index: 99998;
-        flex-direction: column;
-        padding: 8px 16px 16px 16px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }}
-    .sibm-mobile-menu.open {{ display: flex; }}
-    .sibm-mobile-menu a {{
-        color: rgba(255,255,255,0.9);
-        text-decoration: none;
-        font-size: 15px;
-        font-weight: 500;
-        padding: 12px 8px;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-    }}
-    .sibm-mobile-menu a:last-child {{ border-bottom: none; }}
-    .sibm-mobile-menu a:hover {{ color: white; background-color: rgba(255,255,255,0.1); border-radius: 6px; }}
+    # Coluna do logo + uma coluna por página (largura proporcional ao texto)
+    cols = st.columns([2, 1.1, 1.4, 1.2, 1.8, 1.2])
 
-    @media (max-width: 768px) {{
-        .sibm-nav-links {{ display: none !important; }}
-        .sibm-hamburger {{ display: flex !important; }}
-    }}
-    </style>
+    with cols[0]:
+        st.markdown(
+            f'<div style="height:44px;display:flex;align-items:center;">{logo_html}</div>',
+            unsafe_allow_html=True
+        )
 
-    <div class="sibm-navbar">
-        <div class="sibm-logo">{logo_html}</div>
-        <nav class="sibm-nav-links">
-            <a href="/1_Inicio" target="_self">Início</a>
-            <a href="/2_Consulta" target="_self">Consulta de Espécies</a>
-            <a href="/3_Banco_de_Dados" target="_self">Banco de Dados</a>
-            <a href="/5_Metodologias" target="_self">Metodologias para Estudos</a>
-            <a href="/4_Sobre" target="_self">Sobre o Projeto</a>
-        </nav>
-        <div class="sibm-hamburger" onclick="toggleMenu()" id="hamburger">
-            <span></span><span></span><span></span>
-        </div>
-    </div>
-
-    <div class="sibm-mobile-menu" id="mobileMenu">
-        <a href="/1_Inicio" target="_self">Início</a>
-        <a href="/2_Consulta" target="_self">Consulta de Espécies</a>
-        <a href="/3_Banco_de_Dados" target="_self">Banco de Dados</a>
-        <a href="/5_Metodologias" target="_self">Metodologias para Estudos</a>
-        <a href="/4_Sobre" target="_self">Sobre o Projeto</a>
-    </div>
-
-    <script>
-    function toggleMenu() {{
-        const menu = document.getElementById('mobileMenu');
-        menu.classList.toggle('open');
-    }}
-    document.addEventListener('click', function(e) {{
-        const menu = document.getElementById('mobileMenu');
-        const hamburger = document.getElementById('hamburger');
-        if (menu && hamburger && !menu.contains(e.target) && !hamburger.contains(e.target)) {{
-            menu.classList.remove('open');
-        }}
-    }});
-    </script>
-    """, unsafe_allow_html=True)
+    for i, (titulo, caminho) in enumerate(paginas):
+        with cols[i + 1]:
+            if st.button(titulo, key=f"nav_{i}", use_container_width=True):
+                st.switch_page(caminho)
 
     # Espaço entre a navbar e o conteúdo de cada página
-    st.markdown("<div style='margin-top: 80px;'></div>", unsafe_allow_html=True)
-
-    # Botões invisíveis mantidos para compatibilidade com st.switch_page nas outras páginas
-    for i, (titulo, caminho) in enumerate(paginas):
-        if st.session_state.get(f"nav_{i}"):
-            st.switch_page(caminho)
+    st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
